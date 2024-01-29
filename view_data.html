@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Data</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('upload_file') }}">Home</a>
+        <a class="navbar-brand" href="{{ url_for('view_data', filename=filename) }}">Menu</a>
+    </nav>
+    <div class="container">
+        <h1>Summary Dashboard</h1>
+        <form method="POST" action="{{ url_for('view_data', filename=filename) }}">
+            <label for="column_name_1">Pick an item which you want to search?</label>
+            <select name="column_name_1" id="column_name_1">
+                {% for column in columns %}
+                <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="column_name_2">Do you want to search the items based on?</label>
+            <select name="column_name_2" id="column_name_2">
+                {% for column in columns %}
+                <option value="{{ column }}">{{ column }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <input type="submit" value="Search">
+        </form>
+        
+        {% if plot_url %}
+            <h2>Visualization</h2>
+            <img src="data:image/png;base64,{{plot_url}}" class="img-fluid" alt="Visualization">
+            <h2>Grouped Data</h2>
+            {{ grouped_data | safe }}
+        {% endif %}
+    </div>
+</body>
+</html>
